@@ -1,22 +1,25 @@
 'use strict';
 class Ground {
-  constructor (scene) {
+  constructor (width, height) {
+    this._width = width * 10;
+    this._height = height * 10;
     this.createTexture();
     this.createMaterial();
     this.createGeometry();
     this.createMesh();
+    this.updateGeometry();
   }
   set width (v) {
-    this.texture.width = v * 2;
+    this._width = v;
   }
   get width () {
-    return this.texture.width;
+    return this._width;
   }
   set height (v) {
-    this.texture.height = v * 2;
+    this._height = v;
   }
   get height () {
-    return this.texture.height;
+    return this._height;
   }
   updateGeometry () {
     this.geometry.dispose();
@@ -33,6 +36,8 @@ class Ground {
   createTexture () {
     this.texture = document.createElement('canvas');
     this.textureContext = this.texture.getContext('2d');
+    this.texture.width = 1024;
+    this.texture.height = 1024;
     this.textureActual = new THREE.Texture(this.texture);
   }
   createMaterial () {
@@ -41,7 +46,7 @@ class Ground {
     });
   }
   createGeometry () {
-    this.geometry = new THREE.PlaneGeometry(this.width, this.height);
+    this.geometry = new THREE.PlaneGeometry(this._width, this._height);
     if (this.mesh)
       this.mesh.geometry = this.geometry;
   }

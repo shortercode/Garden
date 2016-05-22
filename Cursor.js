@@ -1,13 +1,13 @@
 class Cursor {
 
-  constructor (camera, scene) {
+  constructor (canvas, camera, scene) {
     this.camera = camera;
     this.scene = scene;
     this.element = this.createElement();
     this.element.castShadow = true;
     this.mouse = new THREE.Vector2();
     this.caster = new THREE.Raycaster();
-    this.bindMouse();
+    this.bindMouse(canvas);
     this.eventMap = new Map([
       ['mousedown', []],
       ['mousemove', []],
@@ -24,10 +24,10 @@ class Cursor {
     return sphere;
   }
 
-  bindMouse () {
-    document.body.addEventListener('mousedown', e => this.processMouse('mousedown', e));
-    document.body.addEventListener('mousemove', e => this.processMouse('mousemove', e));
-    document.body.addEventListener('mouseup', e => this.processMouse('mouseup', e));
+  bindMouse (canvas) {
+    canvas.addEventListener('mousedown', e => this.processMouse('mousedown', e));
+    canvas.addEventListener('mousemove', e => this.processMouse('mousemove', e));
+    canvas.addEventListener('mouseup', e => this.processMouse('mouseup', e));
   }
 
   processMouse (eventName, e) {
@@ -39,6 +39,7 @@ class Cursor {
       for (let o of intersects) {
         if (!this.ignored.has(o.object)) {
           this.element.position.copy(o.point);
+          o.shiftKey = e.shiftKey;
           this.dispatchEvent(eventName, o);
           break;
         }

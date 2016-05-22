@@ -9,7 +9,7 @@ class Screen {
     this.element = this.renderer.domElement;
     this.element.style.cursor = 'none';
     this.element.shadowMapEnabled = true;
-    this.renderer.setPixelRatio(devicePixelRatio);
+    //this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.gammaInput = true;
@@ -26,6 +26,7 @@ class Screen {
     this.controls = new THREE.OrbitControls(this.camera, this.element);
     this.controls.minPolarAngle = Math.PI * 0.2; // radians
     this.controls.maxPolarAngle = Math.PI * 0.49; // radians
+    this.controls.enabled = false;
   }
   bindevents() {
     this.resize = this.resize.bind(this);

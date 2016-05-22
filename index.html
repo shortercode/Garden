@@ -1,19 +1,213 @@
-<!DOCTYPE html><html lang="en"><head><title>Mint</title><style>body {
-	background-color: rgb(237, 237, 237);
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-}</style><body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.js"></script>
-  <script src="OrbitControls.js"></script>
-  <script src="suncalc.js"></script>
-  <script src="Doom.js"></script>
+<!DOCTYPE html>
+<html lang="en">
 
-  <script src="Ground.js"></script>
-	<script src="Sky.js"></script>
-	<script src="Sun.js"></script>
-  <script src="Cursor.js"></script>
-	<script src="Screen.js"></script>
+<head>
+    <title>Mint</title>
+    <style>
+        body {
+            background-color: rgb(237, 237, 237);
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: relative;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+        * {
+          box-sizing: inherit;
+        }
+        .palette {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          display: inline-block;
+          padding: 2px;
+          width: 100px;
+          border-radius: 4px;
+          border: 1px solid #F0F0F0;
+          background: #FAFAFA;
+          text-align: center;
+          box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+        }
+        .palette label {
+          display: inline-block;
+          width: 50%;
+          font-size: 12px;
+        }
+        .palette input {
+          width: 50%;
+        }
+        .palette div {
+          display: inline-block;
+          width: 30px;
+          height: 30px;
+          margin: 2px;
+          border: 1px solid #F0F0F0;
+          border-radius: 4px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          opacity: 0.6;
+        }
+        .palette div.selected {
+          opacity: 0.9;
+          border: 1px solid #000000;
+        }
+        .time {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          display: inline-block;
+          padding: 2px;
+          width: 100px;
+          border-radius: 4px;
+          border: 1px solid #F0F0F0;
+          background: #FAFAFA;
+          text-align: center;
+          box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+        }
+        .time div {
+          display: inline-block;
+          width: 60%;
+          font-size: 12px;
+        }
+        .time input {
+          width: 40%;
+        }
+        .ruler {
+          position: absolute;
+          bottom: 20px;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          display: none;
+          height: 30px;
+          padding: 2px;
+          width: 100px;
+          border-radius: 4px;
+          border: 1px solid #F0F0F0;
+          background: #FAFAFA;
+          text-align: center;
+          box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+        }
+        .toolbar {
+          position: absolute;
+          top: 20px;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          display: inline-block;
+          height: 30px;
+          padding: 2px;
+          width: 200px;
+          border-radius: 4px;
+          border: 1px solid #F0F0F0;
+          background: #FAFAFA;
+          text-align: center;
+          box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+        }
+        .toolbar > .material-icons {
+          display: inline-block;
+          border: 1px solid #F0F0F0;
+          border-radius: 4px;
+          width: 25px;
+          height: 25px;
+          margin: 0 2px;
+          font-size: 20px;
+          line-height: 25px;
+          text-align: center;
+          color: #C0C0C0;
+        }
+        .toolbar > .material-icons.selected {
+          border: 1px solid #AAAAF0;
+          color: black;
+        }
+        .setup {
+          position: absolute;
+          z-index: 10;
+          top: 0px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          display: block;
+          height: 300px;
+          width: 400px;
+          border-radius: 4px;
+          border: 1px solid #F0F0F0;
+          background: #FAFAFA;
+          text-align: center;
+          padding: 20px 0;
+          box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+        }
+        .setup label {
+          display: inline-block;
+          width: 40%;
+          font-size: 12px;
+        }
+        .setup input {
+          width: 40%;
+        }
+        .setup div {
+          font-size: 20px;
+        }
+        .setup .submit {
+          margin: 12px auto;
+          display: block;
+          width: 100px;
+          border-radius: 4px;
+          font-size: 16px;
+          border: 1px solid #00C118;
+          color: #039A16;
+          background: #FAFAFA;
+          text-align: center;
+          padding: 4px;
+        }
+        .setup img {
+          width: 30%;
+          display: block;
+          margin: 0 auto;
+        }
+        .blackout {
+          position: absolute;
+          z-index: 5;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: block;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <script src="main.js"></script>
-</body></head></html>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.js"></script>
+        <script src="OrbitControls.js"></script>
+        <script src="suncalc.js"></script>
+        <script src="Doom.js"></script>
+
+        <script src="Ground.js"></script>
+        <script src="Sky.js"></script>
+        <script src="Sun.js"></script>
+        <script src="Cursor.js"></script>
+        <script src="Screen.js"></script>
+        <script src="Tool.js"></script>
+        <script src="Time.js"></script>
+        <script src="Palette.js"></script>
+        <script src="generateBrush.js"></script>
+        <script src="setup.js"></script>
+
+        <script src="tools/orbit.js"></script>
+        <script src="tools/paint.js"></script>
+        <script src="tools/measure.js"></script>
+        <script src="tools/wall.js"></script>
+
+        <script src="main.js"></script>
+
+    </body>
+</head>
+
+</html>

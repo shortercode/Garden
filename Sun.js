@@ -13,7 +13,7 @@ class Sun {
     this.updatePosition();
   }
   createObject () {
-    let geometry = new THREE.SphereGeometry( 10, 16, 8 );
+    let geometry = new THREE.SphereGeometry( 20, 16, 8 );
     let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     let sphere = new THREE.Mesh( geometry, material );
     return sphere;
@@ -30,8 +30,8 @@ class Sun {
     spt.penumbra = 0;
     spt.decay = 1;
     spt.distance = 2000;
-    spt.shadow.mapSize.width = 4096;
-    spt.shadow.mapSize.height = 4096;
+    spt.shadow.mapSize.width = 2056;
+    spt.shadow.mapSize.height = 2056;
     return spt;
   }
   updatePosition () {
@@ -69,7 +69,7 @@ class Sun {
     this.updatePosition();
   }
   get month () {
-    this._date.getMonth() + 1;
+    return this._date.getMonth() + 1;
   }
   set day (v) {
     this._date.setDate(v); // JS Date day starts at 1
