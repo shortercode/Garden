@@ -3,7 +3,7 @@ class Screen {
   constructor() {
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({
-      antialias: false
+      antialias: true
     });
     this.camera = new THREE.PerspectiveCamera(70, 1, 0.1, 10000);
     this.element = this.renderer.domElement;

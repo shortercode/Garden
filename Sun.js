@@ -14,7 +14,7 @@ class Sun {
   }
   createObject () {
     let geometry = new THREE.SphereGeometry( 20, 16, 8 );
-    let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    let material = new THREE.MeshBasicMaterial( {color: 0xffffaa} );
     let sphere = new THREE.Mesh( geometry, material );
     return sphere;
   }
@@ -22,10 +22,10 @@ class Sun {
     let spt = new THREE.DirectionalLight(0xFFFFFF);
     //spt.shadowBias = 0.001;
     spt.castShadow = true;
-    spt.shadowCameraLeft = -500;
-    spt.shadowCameraRight = 500;
-    spt.shadowCameraTop = 500;
-    spt.shadowCameraBottom = -500;
+    spt.shadowCameraLeft = -50;
+    spt.shadowCameraRight = 50;
+    spt.shadowCameraTop = 50;
+    spt.shadowCameraBottom = -50;
     //spt.exponent = 2.0;
     spt.penumbra = 0;
     spt.decay = 1;
@@ -47,7 +47,7 @@ class Sun {
     this.light.position.copy(this.position);
     this.light.lookAt(0, 0, 0);
     this.object.position.copy(this.position);
-    return;
+    //return;
 
     if (z >= -100) {
       this.light.shadowDarkness = 1;

@@ -51,6 +51,7 @@ class Tool {
     const element = document.createElement('i');
     element.textContent = iconName;
     element.className = "material-icons";
+    element.title = name;
     Tool.toolbar.appendChild(element);
     instance.icon = element;
     element.onclick = () => {
