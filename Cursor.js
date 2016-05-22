@@ -4,42 +4,71 @@ class Cursor {
     this.camera = camera;
     this.scene = scene;
     this.element = this.createElement();
-    //this.element.castShadow = true;
+    this.element.castShadow = true;
     this.mouse = new THREE.Vector2();
     this.caster = new THREE.Raycaster();
     this.bindMouse();
+    this.eventMap = new Map([
+      ['mousedown', []],
+      ['mousemove', []],
+      ['mouseup', []]
+    ]);
+    this.ignored = new Set();
+    this.ignored.add(this.element);
   }
 
   createElement () {
     var geometry = new THREE.SphereGeometry( 5, 16, 8 );
     var material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     var sphere = new THREE.Mesh( geometry, material );
-    this.scene.add(sphere);
     return sphere;
   }
 
   bindMouse () {
-    document.body.addEventListener('mousedown', e => this.mouseDown(e));
-    document.body.addEventListener('mousemove', e => this.mouseMove(e));
-    document.body.addEventListener('mouseup', e => this.mouseUp(e));
+    document.body.addEventListener('mousedown', e => this.processMouse('mousedown', e));
+    document.body.addEventListener('mousemove', e => this.processMouse('mousemove', e));
+    document.body.addEventListener('mouseup', e => this.processMouse('mouseup', e));
   }
 
-  mouseMove (e) {
+  processMouse (eventName, e) {
     this.mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
   	this.mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
     this.caster.setFromCamera( this.mouse, this.camera );
     var intersects = this.caster.intersectObjects( this.scene.children );
     if (intersects.length) {
-      var surface = intersects[0].object === this.element ? intersects[1] : intersects[0];
-      this.element.position.copy(surface.point);
+      for (let o of intersects) {
+        if (!this.ignored.has(o.object)) {
+          this.element.position.copy(o.point);
+          this.dispatchEvent(eventName, o);
+          break;
+        }
+      }
     }
   }
 
-  mouseDown (e) {
-
+  addEventListener (eventName, fn) {
+    const eventList = this.eventMap.get(eventName);
+    if (eventList) {
+      eventList.push(fn);
+    }
   }
 
-  mouseUp (e) {
-
+  removeEventListener (eventName, fn) {
+    const eventList = this.eventMap.get(eventName);
+    if (eventList) {
+      const i = eventList.indexOf(fn);
+      if (~i)
+        eventList.splice(i, 1);
+    }
   }
+
+  dispatchEvent (eventName, eventObject) {
+    const eventList = this.eventMap.get(eventName);
+    if (eventList) {
+      for (let event of eventList) {
+        event(eventObject);
+      }
+    }
+  }
+
 }
