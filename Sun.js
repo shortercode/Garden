@@ -49,12 +49,10 @@ class Sun {
     this.object.position.copy(this.position);
     //return;
 
-    if (z >= -100) {
-      this.light.shadowDarkness = 1;
-      this.light.intensity = 1;
-    } else {
-      this.light.shadowDarkness = 0;
-      this.light.intensity = 0;
+    if (z < 50) {
+      z = 1 - Math.min((z * - 0.005), 1);
+      this.light.shadowDarkness = z;
+      this.light.intensity = z;
     }
   }
   set radius (v) {

@@ -41,18 +41,41 @@ class Ground {
     this.textureActual = new THREE.Texture(this.texture);
   }
   createMaterial () {
-    this.material = new THREE.MeshLambertMaterial({
-      map: this.textureActual
-    });
+    var materials = [
+       new THREE.MeshLambertMaterial({
+           color: 0xffffff
+       }),
+       new THREE.MeshLambertMaterial({
+           color: 0xffffff
+       }),
+       new THREE.MeshLambertMaterial({ // up
+           map: this.textureActual
+       }),
+       new THREE.MeshLambertMaterial({ //dwn
+           color: 0xffffff
+       }),
+       new THREE.MeshLambertMaterial({
+           color: 0xffffff
+       }),
+       new THREE.MeshLambertMaterial({
+           color: 0xffffff
+       })
+    ];
+    this.material = new THREE.MeshFaceMaterial( materials );
+
+    //new THREE.MeshLambertMaterial({
+    //  map: this.textureActual
+    //});
   }
   createGeometry () {
-    this.geometry = new THREE.PlaneGeometry(this._width, this._height);
+    this.geometry = new THREE.BoxGeometry(this._width, 1, this._height, 1, 1, 1);
+    //this.geometry = new THREE.PlaneGeometry(this._width, this._height);
     if (this.mesh)
       this.mesh.geometry = this.geometry;
   }
   createMesh () {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.rotation.x = -Math.PI / 2;
+    //this.mesh.rotation.x = -Math.PI / 2;
     this.mesh.receiveShadow = true;
     //this.mesh.castShadow = true;
   }

@@ -27,6 +27,13 @@ class Screen {
     this.controls.minPolarAngle = Math.PI * 0.2; // radians
     this.controls.maxPolarAngle = Math.PI * 0.49; // radians
     this.controls.enabled = false;
+
+    this.tasks = [];
+
+    this.addTask(() => this.renderer.render(this.scene, this.camera));
+  }
+  addTask (fn) {
+    this.tasks.unshift(fn);
   }
   bindevents() {
     this.resize = this.resize.bind(this);
@@ -42,6 +49,8 @@ class Screen {
   }
   redraw() {
     requestAnimationFrame(this.redraw);
-    this.renderer.render(this.scene, this.camera);
+    for (let task of this.tasks) {
+      task();
+    }
   }
 }

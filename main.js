@@ -19,8 +19,14 @@
     scene.add(sun.object);
     scene.add(sun.light);
 
+    const water = new Water(screen.renderer, camera, scene, sun, 1000);
+    water.position.y -= 5;
+    screen.addTask(() => water.update());
+
     const cursor = new Cursor(element, camera, scene);
     scene.add(cursor.element);
+
+
 
     //cursor.ignored.add(sky.mesh);
 
